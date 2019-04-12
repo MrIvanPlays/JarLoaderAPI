@@ -43,8 +43,9 @@ public class JarLoader<T> {
    * @param superClass super class, used to initialize the loaded jar's providers.
    *                   <b>Required because we can't require instance of the super class</b>
    * @return super class if load was accomplished
-   * @throws NullPointerException if file does not exist | if file cannot be loaded (does not contain any files which extend the super class)
-   *                              | if file isn't jar
+   * @throws NullPointerException if file does not exist
+   * @throws NotJarException if file isn't jar
+   * @throws FileCannotBeLoadedException if file cannot be loaded (does not contain any files which extend the super class)
    */
   public T load(File file, Class<T> superClass) {
     try {
@@ -56,7 +57,7 @@ public class JarLoader<T> {
     } catch(InstantiationException | IllegalAccessException e) {
       e.printStackTrace();
     }
-    return null;
+    throw new FileCannotBeLoadedException("File '" + file.getAbsolutePath() + "' cannot be loaded. Reason: unknown");
   }
 
   /**
@@ -66,15 +67,16 @@ public class JarLoader<T> {
    * @param superClass super class, used to initialize the loaded jar's providers.
    *                   <b>Required because we can't require instance of the super class</b>
    * @return class that extends super class if load was accomplished
-   * @throws NullPointerException if file does not exist | if file cannot be loaded (does not contain any files which extend the super class)
-   *                              | if file isn't jar
+   * @throws NullPointerException if file does not exist
+   * @throws NotJarException if file isn't jar
+   * @throws FileCannotBeLoadedException if file cannot be loaded (does not contain any files which extend the super class)
    */
   public Class<? extends T> getRawClass(File file, Class<T> superClass) {
     if(!file.exists()) {
       throw new NullPointerException("File '" + file.getAbsolutePath() + "' does not exist.");
     }
     if(!file.getName().endsWith(".jar")) {
-      throw new NullPointerException("File '" + file.getAbsolutePath() + "' is not jar.");
+      throw new NotJarException("File '" + file.getAbsolutePath() + "' is not jar.");
     }
     try {
       Set<String> classes = new HashSet<>();
@@ -97,6 +99,6 @@ public class JarLoader<T> {
     } catch(IOException | ClassNotFoundException e) {
       e.printStackTrace();
     }
-    throw new NullPointerException("File '" + file.getAbsolutePath() + "' cannot be loaded. No classes were found extending subclass '" + superClass.getSimpleName() + "'");
+    throw new FileCannotBeLoadedException("File '" + file.getAbsolutePath() + "' cannot be loaded. No classes were found extending subclass '" + superClass.getSimpleName() + "'");
   }
 }
