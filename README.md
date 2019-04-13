@@ -1,3 +1,5 @@
+[ ![Download](https://api.bintray.com/packages/mrivanplaysbg/com.github.mrivanplays/JarLoaderAPI/images/download.svg) ](https://bintray.com/mrivanplaysbg/com.github.mrivanplays/JarLoaderAPI/_latestVersion)
+
 # JarLoader API
 Load your jars easily!
 
@@ -88,7 +90,7 @@ public class JarLoaderExample {
       return Collections.emptyList();
     }
     List<ExampleLoadingClass> loaded = new ArrayList<>();
-    JarLoader<ExampleLoadingClass> loader = new JarLoader<>();
+    JarLoader loader = new JarLoader();
     for(File file : dir.listFiles((file, name) -> name.endsWith(".jar"))) {
       loaded.add(loader.load(file, ExampleLoadingClass.class));
     }

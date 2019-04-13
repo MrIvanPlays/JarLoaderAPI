@@ -16,7 +16,7 @@ public class JarLoaderExample {
       return Collections.emptyList();
     }
     List<ExampleLoadingClass> loaded = new ArrayList<>();
-    JarLoader<ExampleLoadingClass> loader = new JarLoader<>();
+    JarLoader loader = new JarLoader();
     for(File file : dir.listFiles((file, name) -> name.endsWith(".jar"))) {
       loaded.add(loader.load(file, ExampleLoadingClass.class));
     }

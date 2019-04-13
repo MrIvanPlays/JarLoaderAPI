@@ -31,10 +31,8 @@ import java.util.jar.JarFile;
 
 /**
  * Represents a jar loader
- *
- * @param <T> super class, used to initialize the loaded jar's providers
  */
-public class JarLoader<T> {
+public class JarLoader {
 
     /**
      * Loads the specified file with instance of the super class
@@ -42,12 +40,13 @@ public class JarLoader<T> {
      * @param file       loaded file
      * @param superClass super class, used to initialize the loaded jar's providers.
      *                   <b>Required because we can't require instance of the super class</b>
+     * @param <T> super class, used to initialize the loaded jar's providers
      * @return super class if load was accomplished
      * @throws NullPointerException        if file does not exist
      * @throws NotJarException             if file isn't jar
      * @throws FileCannotBeLoadedException if file cannot be loaded (does not contain any files which extend the super class)
      */
-    public T load(File file, Class<T> superClass) {
+    public <T> T load(File file, Class<T> superClass) {
         try {
             Class<? extends T> raw = getRawClass(file, superClass);
             T instance = raw.newInstance();
@@ -66,12 +65,13 @@ public class JarLoader<T> {
      * @param file       loaded file
      * @param superClass super class, used to initialize the loaded jar's providers.
      *                   <b>Required because we can't require instance of the super class</b>
+     * @param <T> super class, used to initialize the loaded jar's providers
      * @return class that extends super class if load was accomplished
      * @throws NullPointerException        if file does not exist
      * @throws NotJarException             if file isn't jar
      * @throws FileCannotBeLoadedException if file cannot be loaded (does not contain any files which extend the super class)
      */
-    public Class<? extends T> getRawClass(File file, Class<T> superClass) {
+    public <T> Class<? extends T> getRawClass(File file, Class<T> superClass) {
         if (!file.exists()) {
             throw new NullPointerException("File '" + file.getAbsolutePath() + "' does not exist.");
         }
