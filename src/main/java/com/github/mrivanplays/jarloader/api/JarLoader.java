@@ -49,12 +49,14 @@ public class JarLoader {
     public <T> T load(File file, Class<T> superClass) {
         try {
             Class<? extends T> raw = getRawClass(file, superClass);
-            T instance = raw.newInstance();
+            T instance = raw.getDeclaredConstructor().newInstance();
             if (instance != null) {
                 return instance;
             }
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
+        } catch (InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
         }
         throw new FileCannotBeLoadedException("File '" + file.getAbsolutePath() + "' cannot be loaded. Reason: unknown");
     }
